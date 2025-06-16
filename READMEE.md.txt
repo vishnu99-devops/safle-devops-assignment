@@ -103,18 +103,5 @@ on:
   - Slack webhook
   - Email (subscribers)
 
-## 🧠 Design Decisions, Architecture Trade-offs & Challenges
-
-| Area | Decision | Trade-off / Notes |
-|------|----------|--------------------|
-| Modular Terraform | Used reusable modules | Easier maintenance, but requires clear variable mapping |
-| Instance Type | `t3.micro` for testing | Not production-grade; upgrade required for real load |
-| Self-hosted Node.js App on EC2 | Simplicity | In production, would prefer ECS/EKS |
-| Secrets Management | AWS Secrets Manager | Secure, but slightly more cost |
-| HTTPS | Free SSL via ACM + ALB | Eliminates manual cert handling |
-| CI/CD | GitHub Actions | Simpler integration vs Jenkins, but less control in complex orgs |
-| RDS | Encrypted + Private subnet | Secure setup, but restricts direct access for debugging |
-| Monitoring | CloudWatch + Grafana | Full observability, needs IAM config tuning |
-
 
 
