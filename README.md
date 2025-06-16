@@ -101,6 +101,52 @@ on:
 - Alerts routed via SNS to:
   - Slack webhook
   - Email (subscribers)
+-------------------------------------------------------------------------------------------------------------
 
+**Logging and Debugging with CloudWatch Logs**
 
+ Setup Steps:
+
+1. Install CloudWatch Agent on EC2 Instances
+   sudo yum install amazon-cloudwatch-agent
+
+2. Create CloudWatch Agent Config File (cloudwatch-config.json)
+   Example config to ship application logs:
+   {
+     "logs": {
+       "logs_collected": {
+         "files": {
+           "collect_list": [
+            {
+               "file_path": "/var/log/nodejs-app.log",
+               "log_group_name": "nodejs-app-logs",
+               "log_stream_name": "{instance_id}"
+             }
+           ]
+         }
+       }
+     }
+   }
+
+3. Run CloudWatch Agent
+   sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+     -a fetch-config \
+     -m ec2 \
+     -c file:/path/to/cloudwatch-config.json \
+     -s
+
+4. Log Format in Your Node.js App
+   Use JSON format for logs:
+   console.log(JSON.stringify({
+     timestamp: new Date(),
+     level: 'info',
+     message: 'User login successful',
+     userId: '12345'
+   }));
+
+ Best Practices:
+
+- Use IAM role on EC2 to allow CloudWatch Logs write access.
+- Ensure log rotation is configured to prevent disk overuse.
+- Use structured JSON logs for filtering in CloudWatch Insights.
 
