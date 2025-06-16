@@ -1,0 +1,14 @@
+FROM node:18-alpine
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+USER appuser
+CMD ["node", "app.js"]
+
+
+#Ensures non-root user and minimal base image
